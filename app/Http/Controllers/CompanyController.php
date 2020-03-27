@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
+    public $auth;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        //
+        //payload form decrypted bearer token set
+        $this->auth = $request->auth;
     }
 
     //

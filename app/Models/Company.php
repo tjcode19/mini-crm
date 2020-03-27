@@ -3,6 +3,7 @@
 namespace App\Models;
  
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
  
 class Company extends Model
 { 
@@ -15,31 +16,15 @@ class Company extends Model
         return self::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
             'logo' => $request->password,
             'url' => $request->password,
         ]);
     }
 
-    public function updateSchool($request) {
-        return $this->update([
-            'name' => $request->name,
-            'school_type_id' => $request->school_type_id,
-            'school_category_id' => $request->school_category_id,
-            'status'=> $request->status
-        ]);
-    }
 
-    public function type() {
-        return $this->belongsTo('App\Model\SchoolType','school_type_id', 'id');
-    }
-
-    public function category() {
-        return $this->belongsTo('App\Model\SchoolCategory','school_category_id', 'id');
-    }
-
-    public function users() {
-        return $this->hasMany('App\Model\UserAuth', 'school_id');
+    public function employees() {
+        return $this->hasMany('App\Models\Employee', 'employee_id');
     }
 
     public function status(){

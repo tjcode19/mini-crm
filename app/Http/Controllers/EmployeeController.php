@@ -7,14 +7,15 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
+    public $auth;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        //
+        $this->auth = $request->auth;
     }
 
     //
@@ -55,7 +56,13 @@ class EmployeeController extends Controller
     }
 
     public function allEmployee(){
-        $employees = Employee::all();
+        if($this->auth->type != 'admin'){
+            $employees = Employee::where(['company_id' => $this->auth->company_id])->get();
+        }
+        else{
+            $employees = Employee::all();
+        }
+        
         if(!$employees){
             return response()->json(['status' => false, 'message'=>'Unable to fetch Records'], 500);
         }
@@ -75,7 +82,18 @@ class EmployeeController extends Controller
 
     public function singleEmployee($id) {
 
-        $employeeRecord = Employee::find($id); 
+        if($this->auth->type == 'employee'){
+            if($this->auth->employee_id == $id){
+                $employeeRecord = Employee::find($id); 
+            }
+            else{
+                return response()->json(['status' => false, 'message' => 'Access Denied'], 401);
+            }
+
+        }
+        else{
+            $employeeRecord = Employee::find($id); 
+        }        
 
         if (!$employeeRecord) {
             return response()->json(['status' => false, 'message' => 'No Record Found'], 404);

@@ -20,7 +20,9 @@ class CreateCompanyTable extends Migration
             $table->string('password');
             $table->string('logo')->nullable();
             $table->string('url')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('inactive');
+            $table->integer('status')->default(1);
+            $table->json('login_info')->nullable();
+            $table->string('type')->default('company');
             $table->timestamps();
             $table->softDeletes(); 
         });

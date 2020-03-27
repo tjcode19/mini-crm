@@ -27,6 +27,8 @@ $app = new Laravel\Lumen\Application(
 
  $app->withEloquent();
 
+ $app->configure('const');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -76,9 +78,11 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+    'admin' => App\Http\Middleware\AdminMiddleware::class,
+    'company' => App\Http\Middleware\CompanyMiddleware::class
+]);
 
 /*
 |--------------------------------------------------------------------------

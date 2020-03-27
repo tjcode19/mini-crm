@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Employee extends Model 
 {
@@ -26,15 +27,13 @@ class Employee extends Model
         return self::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
-            'company_id' => $request->company_id,
-            'api_token' => 'hjgugu48763874jhgjhgs8dysyudtiw'
+            'password' =>Hash::make($request->password),
+            'company_id' => $request->company_id
         ]);
     }
 
-    public function userData()
-    {
-        return $this->belongsTo('App\Model\UserAuth', 'employee_id');
+    public function companyData() {
+        return $this->belongsTo('App\Models\Company', 'company_id', 'id');
     }
 
     
