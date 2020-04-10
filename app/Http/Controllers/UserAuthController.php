@@ -39,29 +39,32 @@ class UserAuthController extends Controller
     public function companyLevellogin($request){
         $auth = Company::where('email', $request->username)->first();
         if(!$auth){
-            return response()->json(['status'=>false, 'message' => 'User does not exist'], 404);
+            return response()->json(['status'=>false, 'message' => 'User does not exist'], 200);
         }
         else{
             if($auth->status < 1){
-                return response()->json(['status'=>false, 'message' => 'User Account Inactive'], 404);
+                return response()->json(['status'=>false, 'message' => 'User Account Inactive'], 200);
             }
             else{
                 if(Hash::check($request->password, $auth->password)){
                     $login_info = json_encode(['login_time'=> date("h:i:s")]); 
-                    $auth->type ="company";
-                    $auth->employee_id =$auth->id;
-                    $token =  $this->createToken($auth); 
+                    $token_credentials = json_encode([
+                        'type'=> $auth->type, 
+                        'company_id'=>$auth->company_id, 
+                        'employee_id' => $auth->id]); 
+                    $token =  $this->createToken($token_credentials); 
                     $auth->update(['login_info'=>$login_info]);
                     return response()->json([
                         'status' => true,
                         'message' => 'Login Successful',
                         'token' => $token, 
+                        'type'=> 'company',
                         'data'=>$auth->schema()
                     ], 
                         200);
                 }
                 else{
-                    return response()->json(['status'=>false, 'message' => 'Invalid login credentials'], 400);
+                    return response()->json(['status'=>false, 'message' => 'Invalid login credentials'], 200);
                 }
             }
         }
@@ -71,11 +74,11 @@ class UserAuthController extends Controller
     public function employeelogin($request){
         $auth = Employee::where('email', $request->username)->first();
         if(!$auth){
-            return response()->json(['status'=>false, 'message' => 'User does not exist'], 404);
+            return response()->json(['status'=>false, 'message' => 'User does not exist'], 200);
         }
         else{
             if($auth->status < 1){
-                return response()->json(['status'=>false, 'message' => 'User Account Inactive'], 404);
+                return response()->json(['status'=>false, 'message' => 'User Account Inactive'], 200);
             }
             else{
                 if(Hash::check($request->password, $auth->password)){
@@ -90,14 +93,15 @@ class UserAuthController extends Controller
                     return response()->json([
                         'status' => true,
                         'message' => 'Login Successful',
-                        'token' => $token, 
+                        'token' => $token,
+                        'type' => $auth->type, 
                         'data'=>$auth->schema(),
                         'company' => (($auth->type!='admin')?$auth->companyData->schema():'')
                     ], 
                         200);
                 }
                 else{
-                    return response()->json(['status'=>false, 'message' => 'Invalid login credentials'], 400);
+                    return response()->json(['status'=>false, 'message' => 'Invalid login credentials'], 200);
                 }
             }
         }

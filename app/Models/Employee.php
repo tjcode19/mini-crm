@@ -39,6 +39,7 @@ class Employee extends Model
     
     public function schema() {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email
         ];

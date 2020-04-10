@@ -47,7 +47,8 @@ class Company extends Model
             'company_id' => $this->id,
             'name' => $this->name,
             'status'=> 'Inactive',
-            'verified'=> $this->verified,     
+            'verified'=> $this->verified, 
+            'email' => $this->email    
         ];
     }
 }
