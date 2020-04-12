@@ -24,7 +24,7 @@ class EmployeeController extends Controller
 
         $this->validate($request, [
             'company_id' => 'required|exists:company,id',
-            'name' => 'required|min:3|max:255',
+            'employee_name' => 'required|min:3|max:255',
             'email' => 'required|email|unique:employee,email',
             'password' => 'required|min:4|max:16'
         ]);
@@ -34,19 +34,6 @@ class EmployeeController extends Controller
             return response()->json(['status' => false, 'message' => 'Creation Failed'], 500);
         }  
         else{
-                // $request->employee_id = $employeeData->id;
-                // $username = explode("@",$request->email);
-                // $request->username = $username[0];
-                // $request->password = $this->generate_string(6);
-                // $auth = UserAuth::createNew($request);
-
-                // if(!$auth){
-                //     return response()->json(['status' => false, 'message' => 'Auth Creation Failed'], 500);
-                // }
-                // $auth->passwordRaw = $request->password;
-                // $notice = new LoginCredentialsJob($auth);
-                // $send_notice = $notice->handle();
-
                 return response()->json([
                     'status' => true,
                     'message'=>'Employee Account Created Successfully', 

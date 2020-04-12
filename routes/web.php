@@ -34,13 +34,20 @@ $router->group(['prefix' => 'api/v1/company'], function () use ($router){
 
 $router->group(['prefix' => 'api/v1/employee'], function () use ($router){
     $router->group(['middleware' => 'auth'], function () use ($router){ 
-        $router->group(['middleware' => 'company', 'middleware' => 'admin'], function () use ($router){  
+        $router->group(['middleware' => ['admin']], function () use ($router){  
             $router->post('/create','EmployeeController@createNew');     
             $router->get('/all','EmployeeController@allEmployee'); 
             $router->delete('/{employee_id}','EmployeeController@deleteEmployee'); 
-        });        
+        }); 
+        $router->group(['middleware' => 'company'], function () use ($router){  
+            $router->post('/company/create','EmployeeController@createNew');     
+            $router->get('/company/all','EmployeeController@allEmployee'); 
+            $router->delete('/company/{employee_id}','EmployeeController@deleteEmployee'); 
+        });   
+        $router->post('/changepass','userAuthController@passwordChange');      
         $router->get('/{employee_id}','EmployeeController@singleEmployee');         
         $router->put('/{employee_id}','EmployeeController@updateEmployee'); 
+        
     });
 });
 
@@ -51,7 +58,6 @@ $router->group(['prefix' => 'api/v1/employee'], function () use ($router){
 
 $router->group(['prefix' => 'api/v1/auth'], function () use ($router){
     $router->post('/login','userAuthController@userLogin');     
-    $router->get('/all','EmployeeController@allEmployee'); 
     $router->put('/{employee_id}','EmployeeController@updateEmployee'); 
     $router->get('/{employee_id}','EmployeeController@singleEmployee'); 
     $router->delete('/{employee_id}','EmployeeController@deleteEmployee'); 

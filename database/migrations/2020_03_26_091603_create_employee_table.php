@@ -21,14 +21,14 @@ class CreateEmployeeTable extends Migration
             $table->string('password');
             $table->integer('status')->default(1);
             $table->integer('company_id')->default(-1);
-            $table->enum('type', ['employee', 'admin'])->default('employee');
+            $table->enum('type', ['employee', 'admin', 'company'])->default('employee');
             $table->json('login_info')->nullable();
             $table->string('reset_code')->nullable();
             $table->timestamps();
         });
 
         DB::table('employee')->insert([
-            'name' => 'Admin', 
+            'name' => 'Admin User', 
             'email' => 'test@test.com', 
             'password'=> Hash::make('password'), 
             'type'=>'admin'

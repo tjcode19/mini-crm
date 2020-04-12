@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Company;
+use App\Models\Employee;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -25,8 +26,9 @@ class CompanyController extends Controller
 
         $this->validate($request, [
             'name' => 'required|min:3|max:255',
-            'email' => 'required|email|unique:company,email',
-            'password' => 'required|min:4|max:16'
+            'email' => 'required|email|unique:employee,email',
+            'password' => 'required|min:4|max:16',
+            'employee_name' => 'required|min:4|max:34'
         ]);
  
         $companyData = Company::createNew($request); 
@@ -34,24 +36,20 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => 'Creation Failed'], 500);
         }  
         else{
-                // $request->employee_id = $employeeData->id;
-                // $username = explode("@",$request->email);
-                // $request->username = $username[0];
-                // $request->password = $this->generate_string(6);
-                // $auth = UserAuth::createNew($request);
-
-                // if(!$auth){
-                //     return response()->json(['status' => false, 'message' => 'Auth Creation Failed'], 500);
-                // }
-                // $auth->passwordRaw = $request->password;
-                // $notice = new LoginCredentialsJob($auth);
-                // $send_notice = $notice->handle();
-
+            $request->company_id = $companyData->id;
+            $request->type = 'company';
+            $employee = Employee::createNew($request);
+            if(!$companyData){
+                return response()->json(['status' => false, 'message' => 'Creation Failed'], 500);
+            } 
+            else{
                 return response()->json([
                     'status' => true,
                     'message'=>'Company Account Created Successfully', 
-                    'data' => $companyData->schema()], 
+                    'data' => $companyData->schemaOne()], 
                     200);
+            }
+               
         }
     }
 
@@ -73,6 +71,7 @@ class CompanyController extends Controller
             return response()->json(['status' => true, 'message'=>'No Record Found'], 200);
         }
     }
+   
 
     public function singleCompany($id) {
 

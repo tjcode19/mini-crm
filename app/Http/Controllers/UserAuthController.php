@@ -13,63 +13,66 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserAuthController extends Controller
 {
-    public function __construct()
+    public  $auth;
+    public function __construct(Request $request)
     {
         //
+        $this->auth = $request->auth;
     }
 
     public function userLogin(Request $request){
 
         $this->validate($request, [
             'username' => 'required',
-            'password' => 'required',
-            'type' => 'required'
+            'password' => 'required'
         ]);
 
-        if($request->type != "company"){
-            return $this->employeelogin($request);
-        }
-        else{
-            return $this->companyLevellogin($request);
-        }
+        return $this->employeelogin($request);
+
+        // if($request->type != "company"){
+        //     return $this->employeelogin($request);
+        // }
+        // else{
+        //     return $this->companyLevellogin($request);
+        // }
 
         
     }
 
-    public function companyLevellogin($request){
-        $auth = Company::where('email', $request->username)->first();
-        if(!$auth){
-            return response()->json(['status'=>false, 'message' => 'User does not exist'], 200);
-        }
-        else{
-            if($auth->status < 1){
-                return response()->json(['status'=>false, 'message' => 'User Account Inactive'], 200);
-            }
-            else{
-                if(Hash::check($request->password, $auth->password)){
-                    $login_info = json_encode(['login_time'=> date("h:i:s")]); 
-                    $token_credentials = json_encode([
-                        'type'=> $auth->type, 
-                        'company_id'=>$auth->company_id, 
-                        'employee_id' => $auth->id]); 
-                    $token =  $this->createToken($token_credentials); 
-                    $auth->update(['login_info'=>$login_info]);
-                    return response()->json([
-                        'status' => true,
-                        'message' => 'Login Successful',
-                        'token' => $token, 
-                        'type'=> 'company',
-                        'data'=>$auth->schema()
-                    ], 
-                        200);
-                }
-                else{
-                    return response()->json(['status'=>false, 'message' => 'Invalid login credentials'], 200);
-                }
-            }
-        }
+    // public function companyLevellogin($request){
+    //     $auth = Company::where('email', $request->username)->first();
+    //     if(!$auth){
+    //         return response()->json(['status'=>false, 'message' => 'User does not exist'], 200);
+    //     }
+    //     else{
+    //         if($auth->status < 1){
+    //             return response()->json(['status'=>false, 'message' => 'User Account Inactive'], 200);
+    //         }
+    //         else{
+    //             if(Hash::check($request->password, $auth->password)){
+    //                 $login_info = json_encode(['login_time'=> date("h:i:s")]); 
+    //                 $token_credentials = json_encode([
+    //                     'type'=> $auth->type, 
+    //                     'company_id'=>$auth->id, 
+    //                     'employee_id' => $auth->id]); 
+    //                 $token =  $this->createToken($token_credentials); 
+    //                 $auth->update(['login_info'=>$login_info]);
+    //                 return response()->json([
+    //                     'status' => true,
+    //                     'message' => 'Login Successful',
+    //                     'token' => $token, 
+    //                     'type'=> 'company',
+    //                     'data'=>$auth->schema()
+    //                 ], 
+    //                     200);
+    //             }
+    //             else{
+    //                 return response()->json(['status'=>false, 'message' => 'Invalid login credentials'], 200);
+    //             }
+    //         }
+    //     }
 
-    }
+    // }
 
     public function employeelogin($request){
         $auth = Employee::where('email', $request->username)->first();
@@ -145,6 +148,23 @@ class UserAuthController extends Controller
         }
         else{
             $auth->update(['reset_token'=>NULL, 'password'=>Hash::make($request->password)]);  
+            return response()->json(['status' => true, 'message' => 'Password has been reset successfully'], 200);
+        }   
+    }
+
+     //reset password with code set to email address
+     public function passwordChange(Request $request){
+        $this->validate($request, [
+            'password' => 'required'
+        ]);
+        if($this->auth->employee_id != ''){
+            $auth = Employee::where(['id' => $this->auth->employee_id])->first();
+        }
+        if(!$auth){
+            return response()->json(['status' => false, 'message' =>  'Update Failed'], 200);
+        }
+        else{
+            $auth->update(['password'=>Hash::make($request->password)]);  
             return response()->json(['status' => true, 'message' => 'Password has been reset successfully'], 200);
         }   
     }

@@ -15,30 +15,25 @@ class Company extends Model
     public static function createNew($request) {
         return self::create([
             'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'logo' => $request->password,
-            'url' => $request->password,
+            'email' => $request->email
         ]);
     }
 
 
-    public function employees() {
+    public static function employees() {
         return $this->hasMany('App\Models\Employee', 'employee_id');
     }
 
     public function status(){
-        return (($this->status != null) || ($this->status> 0))?'Active':'Inactive';
+        return (($this->status != 0) ?'Active':'Inactive');
     }
 
     public function schemaOne() {
         return [
             'company_id' => $this->id,
             'name' => $this->name,
-           // 'status'=> $this->status(),
-            'verified'=> $this->verified,
-           /// 'type' => $this->type->name,           
-           // 'category'=> $this->category->name,
+            'email'=> $this->email,
+            'url'=> $this->url
         ];
     }
 
@@ -46,8 +41,8 @@ class Company extends Model
         return [
             'company_id' => $this->id,
             'name' => $this->name,
-            'status'=> 'Inactive',
-            'verified'=> $this->verified, 
+            'status'=> $this->status(),
+            'url'=> $this->url, 
             'email' => $this->email    
         ];
     }

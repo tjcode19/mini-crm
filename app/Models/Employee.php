@@ -25,10 +25,11 @@ class Employee extends Model
 
     public static function createNew($request) {
         return self::create([
-            'name' => $request->name,
+            'name' => $request->employee_name,
             'email' => $request->email,
             'password' =>Hash::make($request->password),
-            'company_id' => $request->company_id
+            'company_id' => $request->company_id,
+            'type' => $request->type
         ]);
     }
 
