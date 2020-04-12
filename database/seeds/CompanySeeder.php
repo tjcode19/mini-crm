@@ -21,15 +21,15 @@ class CompanySeeder extends Seeder
                  'email' => 'comp'.$c.'@comp.com',
              ]);
  
-             $employee = DB::table('employee')->insert([
-                 'name' => 'Employee '. Str::random(3),
-                 'email' => 'emp'.$c.Str::random(2).'@comp.com',
+            DB::table('employee')->insert([
+                 'name' => 'Company Admin '. Str::random(3),
+                 'email' => 'adm'.$c.Str::random(2).'@comp.com',
                  'password' =>Hash::make('admin'),
                  'company_id' => $c,
                  'type' => 'company'
              ]);
  
-             $employee = DB::table('employee')->insert([
+             DB::table('employee')->insert([
                  'name' => 'Employee '.Str::random(3),
                  'email' => 'emp'.$c.Str::random(3).'@comp.com',
                  'password' =>Hash::make('employee'),

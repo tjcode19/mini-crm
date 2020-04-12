@@ -57,6 +57,13 @@ php artisan migrate --seed
 The seed is required to automatically load DB with 30 companies and 60 employees
 ```
 
+### Run your Lumen app 
+```
+Make sure your sever is up
+php -S localhost:8000 -t public
+If you need to change this port from 8000, kindly remember to change it in the config.js file of the mini-crm-frontend
+```
+
 ## Login Information
 
 ### Admin User
