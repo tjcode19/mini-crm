@@ -5,7 +5,36 @@ Laravel Lumen is a stunningly fast PHP micro-framework for building web applicat
 
 ## How to set up locally
 
-* Clone from  <i>git clone https://github.com/tjcode19/mini-crm.git</i>
+* Clone repo: 
+<code>git clone https://github.com/tjcode19/mini-crm.git</code>
+
+* CD into your project
+<p>You will need to be inside that project file to enter all of the rest of the commands.</p>
+
+* Install Composer Dependencies
+<code>composer install</code>
+
+*Install NPM Dependencies
+<code>npm install</code>
+
+*Create a copy of your .env file
+<code>cp .env.example .env</code>
+<p>This will create a copy of the .env.example file in your project and name the copy simply .env</p>
+
+*Generate an app encryption key
+<code>php artisan key:generate</code>
+
+*Create an empty database for our application
+<p>Create an empty database for your project using the database tools you prefer (I use wampserver)</p>
+
+*In the .env file, add database information to allow Laravel to connect to the database
+<p>We will want to allow Laravel to connect to the database that you just created in the previous step. To do this, we must add the connection credentials in the .env file and Laravel will handle the connection from there.</p>
+
+<p>In the .env file fill in the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD options to match the credentials of the database you just created. This will allow us to run migrations and seed the database in the next step.
+</p>
+
+*Migrate the database
+<code>php artisan migrate --seed</code>
 
 ## Contributing
 
