@@ -5,22 +5,31 @@ The backend part of the project developed with Laravel Lumen.
 Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax.
 
 ## How to set up locally
+```
 
 * Clone repo: 
+```
 <code>git clone https://github.com/tjcode19/mini-crm.git</code>
+```
 
 * CD into your project
+```
 You will need to be inside that project file to enter all of the rest of the commands.
+```
 
 * Install Composer Dependencies
+```
 <code>composer install</code>
+```
 
 * Install NPM Dependencies
+```
 <code>npm install</code>
+```
 
 * Create a copy of your .env file
 <code>cp .env.example .env</code>
-<p>This will create a copy of the .env.example file in your project and name the copy simply .env</p>
+<i>This will create a copy of the .env.example file in your project, rename this to .env</i>
 
 * Generate an app encryption key
 <code>php artisan key:generate</code>
